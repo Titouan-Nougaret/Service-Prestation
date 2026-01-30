@@ -3,7 +3,7 @@ export interface IUserBase {
   email: string;
   password: string;
   image?: string;
-  role: 'user' | 'admin';
+  role: 'user' | 'manager' | 'admin';
   createdAt?: Date;
   updatedAt?: Date;
 }

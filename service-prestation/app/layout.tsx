@@ -15,8 +15,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Service Prestation",
-  description: "Service Prestation",
+  title: "Prestalink",
+  description: "Gestion de prestations de services",
 };
 
 export default function RootLayout({
@@ -27,9 +27,14 @@ export default function RootLayout({
   return (
     <html lang="fr" className={inter.variable}>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} w-full h-full antialiased`}
+        className={`${geistSans.variable} ${geistMono.variable} w-full h-full antialiased relative`}
       >
-        {children}
+        <header className="fixed top-0 left-0 right-0 h-10 bg-slate-950 text-slate-50 flex items-center px-6 z-50">
+          <span className="text-md tracking-[0.3em] font-light">PRESTALINK</span>
+        </header>
+        <main className="pt-10">
+          {children}
+        </main>
       </body>
     </html>
   );

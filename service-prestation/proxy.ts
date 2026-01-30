@@ -7,7 +7,7 @@ const protectedRoutes = ["/dashboard", "/admin", "/profile"];
 // Routes de connexion/inscription (on redirige vers / si déjà connecté)
 const authRoutes = ["/login", "/register"];
 
-export async function middleware(request: NextRequest) {
+export async function proxy(request: NextRequest) {
   const path = request.nextUrl.pathname;
   const isProtectedRoute = protectedRoutes.some((route) => path.startsWith(route));
   const isAuthRoute = authRoutes.some((route) => path.startsWith(route));

@@ -5,6 +5,7 @@ interface UserState {
     id: string;
     email: string;
     name?: string;
+    role?: "user" | "manager" | "admin";
   } | null;
   status: "idle" | "loading" | "succeeded" | "failed";
   error: string | null;

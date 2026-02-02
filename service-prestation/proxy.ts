@@ -2,14 +2,16 @@ import { NextRequest, NextResponse } from "next/server";
 import { decrypt } from "@/lib/auth";
 
 // Routes qui nécessitent d'être connecté
-const protectedRoutes = ["/dashboard", "/admin", "/profile"];
+const protectedRoutes = ["/dashboard", "/admin", "/profile","/presta","/"];
 
 // Routes de connexion/inscription (on redirige vers / si déjà connecté)
 const authRoutes = ["/login", "/register"];
 
 export async function proxy(request: NextRequest) {
   const path = request.nextUrl.pathname;
-  const isProtectedRoute = protectedRoutes.some((route) => path.startsWith(route));
+  const isProtectedRoute = protectedRoutes.some((route) => 
+    route === "/" ? path === "/" : path.startsWith(route)
+  );
   const isAuthRoute = authRoutes.some((route) => path.startsWith(route));
 
   // Récupérer le token depuis les cookies

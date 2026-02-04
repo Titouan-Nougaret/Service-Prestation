@@ -4,7 +4,10 @@ import ReduxProvider from "@/components/providers/redux-provider";
 import Header from "@/components/Header";
 import "./globals.css";
 import { AppSidebar } from "@/components/Sidebar";
-import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
+import { SidebarProvider } from "@/components/ui/sidebar";
+import { CustomSidebarTrigger } from "@/components/CustomSidebarTrigger";
+import ThemeInitializer from "@/components/ThemeInitializer";
+import { Card } from "@/components/ui/card";
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-sans" });
 
@@ -35,13 +38,16 @@ export default function RootLayout({
         suppressHydrationWarning
       >
         <ReduxProvider>
+          <ThemeInitializer />
           <SidebarProvider defaultOpen={true}>
             <Header />
             <AppSidebar />
-            <main className="pt-10 flex justify-center flex-1 w-full">
-              <SidebarTrigger className="justify-self-start"/>
-              {children}
-            </main>
+            <div className="mt-10 p-2 flex w-full gap-4">
+              <CustomSidebarTrigger />
+              <Card className="flex-1 h-full overflow-auto max-w-[93%] m-auto p-6 relative shadow-sm">
+                {children}
+              </Card>
+            </div>
           </SidebarProvider>
         </ReduxProvider>
       </body>

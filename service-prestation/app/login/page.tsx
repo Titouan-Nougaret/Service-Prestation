@@ -11,6 +11,7 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { setSavedEmail } from "@/store/slices/user-preferences-slice";
+import { setUser } from "@/store/slices/user-slice";
 import { selectSavedEmail } from "@/store/selectors/user-preferences-selector";
 
 export default function Page() {
@@ -59,16 +60,15 @@ export default function Page() {
       if (!res.ok) {
         throw new Error(data.message || "Une erreur est survenue");
       }
+      console.log(data);
+      dispatch(setUser(data.user));
 
-      // Gérer la sauvegarde de l'email
       if (rememberMe) {
         dispatch(setSavedEmail(email));
       } else {
         dispatch(setSavedEmail(null));
       }
-
-      // Redirection vers l'admin après connexion réussie
-      router.refresh(); // Rafraîchir pour mettre à jour le middleware/cookies côté serveur
+      router.refresh();
       router.push("/");
     } catch (err: unknown) {
       if (err instanceof Error) {
@@ -82,7 +82,7 @@ export default function Page() {
   };
 
   return (
-    <div className="flex min-h-screen items-center justify-center p-4">
+    <div className="fixed inset-0 flex items-center justify-center p-4 bg-background/60 backdrop-blur-md z-9999">
       <Card className="w-full max-w-md p-6 shadow-lg">
         <CardTitle className="text-center mb-6 tracking-widest font-light">
           PRESTALINK
@@ -127,7 +127,6 @@ export default function Page() {
               <Checkbox
                 id="rememberMe"
                 name="rememberMe"
-                className=""
                 checked={rememberMe}
                 onCheckedChange={(checked) => {
                   const isChecked = checked === true;

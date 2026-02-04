@@ -9,7 +9,6 @@ export default function ReduxProvider({
 }: {
   children: React.ReactNode;
 }) {
-  // Initialize the store once using useState initializer function
   const [store] = useState(() => makeStore());
   const [p] = useState(() => persistor(store));
 

@@ -26,7 +26,7 @@ const storage = typeof window !== "undefined"
 const persistConfig = {
   key: "root",
   storage,
-  whitelist: ["userPreferences"], // Nom de la clé dans le combineReducers
+  whitelist: ["user", "userPreferences"], // Nom de la clé dans le combineReducers
   debug: true, // Active les logs de redux-persist
 };
 

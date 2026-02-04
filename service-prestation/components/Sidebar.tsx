@@ -5,27 +5,50 @@ import {
   SidebarContent,
   SidebarFooter,
   SidebarGroup,
-  SidebarGroupContent,
-  SidebarGroupLabel,
   SidebarHeader,
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
+  SidebarMenuSub,
+  SidebarMenuSubButton,
+  SidebarMenuSubItem,
 } from "@/components/ui/sidebar";
+import {
+  Collapsible,
+  CollapsibleContent,
+  CollapsibleTrigger,
+} from "@/components/ui/collapsible";
 import { cn } from "@/lib/utils";
 import { HugeiconsIcon } from "@hugeicons/react";
-import { LogoutIcon, WantedIcon, HomeIcon } from "@hugeicons/core-free-icons";
+import {
+  LogoutIcon,
+  WantedIcon,
+  HomeIcon,
+  ArrowRight01Icon,
+  ShieldUserIcon,
+  UserAdd01Icon,
+  Sun01Icon,
+  Moon01Icon,
+  Pdf01Icon,
+} from "@hugeicons/core-free-icons";
 import { useUser } from "@/hooks/use-user";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useAppDispatch } from "@/store/hooks";
+import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { clearUser } from "@/store/slices/user-slice";
+import { setTheme } from "@/store/slices/user-preferences-slice";
+import { selectTheme } from "@/store/selectors/user-preferences-selector";
 
 export function AppSidebar() {
   const user = useUser();
+  const theme = useAppSelector(selectTheme);
 
   const router = useRouter();
   const dispatch = useAppDispatch();
+
+  const toggleTheme = () => {
+    dispatch(setTheme(theme === "dark" ? "light" : "dark"));
+  };
 
   const handleLogout = async () => {
     try {
@@ -44,7 +67,7 @@ export function AppSidebar() {
 
   const layout = {
     header: {
-      title: "PRESTALINK",
+      title: "NAVIGATION",
     },
     content: {
       items: [
@@ -53,20 +76,29 @@ export function AppSidebar() {
           href: "/",
           icon: HomeIcon,
         },
-        {
-          title: "Gestion des prestations",
-          href: "/prestations",
-          icon: WantedIcon,
-        },
       ],
       groups: [
         {
-          displayCondition: user?.role === "admin",
-          title: "Administration",
+          displayCondition: true,
+          title: "Gestion des prestations",
+          icon: WantedIcon,
           items: [
             {
-              title: "Users",
-              href: "/admin/users",
+              title: "Templates",
+              href: "/prestations/pdf-template",
+              icon: Pdf01Icon,
+            },
+          ],
+        },
+        {
+          displayCondition: user?.role === "admin",
+          title: "Administration",
+          icon: ShieldUserIcon,
+          items: [
+            {
+              title: "Ajout utilisateur",
+              href: "/admin/add-users",
+              icon: UserAdd01Icon,
             },
           ],
         },
@@ -74,7 +106,7 @@ export function AppSidebar() {
     },
     footer: {
       items: {
-        title: "Se deconnecter",
+        title: "Se déconnecter",
         action: handleLogout,
         icon: LogoutIcon,
       },
@@ -117,20 +149,36 @@ export function AppSidebar() {
           (group) =>
             group.displayCondition && (
               <SidebarGroup key={group.title}>
-                <SidebarGroupLabel>{group.title}</SidebarGroupLabel>
-                <SidebarGroupContent>
-                  <SidebarMenu>
-                    {group.items.map((item) => (
-                      <SidebarMenuItem key={item.title}>
-                        <SidebarMenuButton asChild tooltip={item.title}>
-                          <Link href={item.href}>
-                            <span>{item.title}</span>
-                          </Link>
+                <SidebarMenu>
+                  <Collapsible asChild className="group/collapsible">
+                    <SidebarMenuItem>
+                      <CollapsibleTrigger asChild>
+                        <SidebarMenuButton tooltip={group.title}>
+                          <HugeiconsIcon icon={group.icon} />
+                          <span>{group.title}</span>
+                          <HugeiconsIcon
+                            icon={ArrowRight01Icon}
+                            className="ml-auto transition-transform duration-200 group-data-[state=open]/collapsible:rotate-90"
+                          />
                         </SidebarMenuButton>
-                      </SidebarMenuItem>
-                    ))}
-                  </SidebarMenu>
-                </SidebarGroupContent>
+                      </CollapsibleTrigger>
+                      <CollapsibleContent>
+                        <SidebarMenuSub>
+                          {group.items.map((subItem) => (
+                            <SidebarMenuSubItem key={subItem.title}>
+                              <SidebarMenuSubButton asChild>
+                                <Link href={subItem.href}>
+                                  <HugeiconsIcon icon={subItem.icon} />
+                                  <span>{subItem.title}</span>
+                                </Link>
+                              </SidebarMenuSubButton>
+                            </SidebarMenuSubItem>
+                          ))}
+                        </SidebarMenuSub>
+                      </CollapsibleContent>
+                    </SidebarMenuItem>
+                  </Collapsible>
+                </SidebarMenu>
               </SidebarGroup>
             ),
         )}
@@ -139,29 +187,43 @@ export function AppSidebar() {
         <SidebarMenu>
           <SidebarMenuItem>
             <SidebarMenuButton
-              onClick={layout.footer.items.action}
-              tooltip={layout.footer.items.title}
-              className="text-destructive hover:text-destructive hover:bg-destructive/10"
+              onClick={toggleTheme}
+              tooltip="Changer de thème"
+              className="bg-foreground text-background hover:bg-foreground/90 hover:text-background transition-colors"
             >
-              <HugeiconsIcon icon={layout.footer.items.icon} />
-              <span>{layout.footer.items.title}</span>
+              <HugeiconsIcon icon={theme === "dark" ? Sun01Icon : Moon01Icon} />
+              <span>Mode {theme === "dark" ? "Clair" : "Sombre"}</span>
             </SidebarMenuButton>
           </SidebarMenuItem>
-          <SidebarMenuItem>
-            <div className="flex items-center gap-2 px-4 py-2 text-sm">
-              <div className="flex flex-col">
-                <span className="font-medium truncate max-w-[150px]">
-                  {user?.name || user?.email || "Utilisateur"}
-                </span>
-                {user?.role && (
-                  <span className="text-xs text-muted-foreground capitalize">
-                    {user.role}
-                  </span>
-                )}
-              </div>
-            </div>
-          </SidebarMenuItem>
         </SidebarMenu>
+        {user && (
+          <SidebarMenu>
+            <SidebarMenuItem>
+              <div className="flex items-center gap-2 px-4 py-2 text-sm">
+                <div className="flex flex-col">
+                  <span className="font-medium truncate max-w-[150px]">
+                    {user?.name || user?.email || "Utilisateur"}
+                  </span>
+                  {user?.role && (
+                    <span className="text-xs text-muted-foreground capitalize">
+                      {user.role}
+                    </span>
+                  )}
+                </div>
+              </div>
+            </SidebarMenuItem>
+            <SidebarMenuItem>
+              <SidebarMenuButton
+                onClick={layout.footer.items.action}
+                tooltip={layout.footer.items.title}
+                className="text-destructive hover:text-destructive hover:bg-destructive/10"
+              >
+                <HugeiconsIcon icon={layout.footer.items.icon} />
+                <span>{layout.footer.items.title}</span>
+              </SidebarMenuButton>
+            </SidebarMenuItem>
+          </SidebarMenu>
+        )}
       </SidebarFooter>
     </Sidebar>
   );

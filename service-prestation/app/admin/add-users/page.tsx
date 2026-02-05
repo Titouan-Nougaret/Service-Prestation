@@ -1,17 +1,20 @@
-'use client';
+"use client";
 
-import { useState } from 'react';
-import { Card, CardContent, CardTitle } from '@/components/ui/card';
-import { Field, FieldLabel } from '@/components/ui/field';
-import { Input } from '@/components/ui/input';
-import { Button } from '@/components/ui/button';
+import { useState } from "react";
+import { Card, CardContent, CardTitle } from "@/components/ui/card";
+import { Field, FieldLabel } from "@/components/ui/field";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
 
 export default function AdminUsersPage() {
-  const [email, setEmail] = useState('');
-  const [name, setName] = useState('');
-  const [role, setRole] = useState<'user' | 'manager' | 'admin'>('user');
+  const [email, setEmail] = useState("");
+  const [name, setName] = useState("");
+  const [role, setRole] = useState<"user" | "manager" | "admin">("user");
   const [loading, setLoading] = useState(false);
-  const [message, setMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
+  const [message, setMessage] = useState<{
+    type: "success" | "error";
+    text: string;
+  } | null>(null);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -19,10 +22,10 @@ export default function AdminUsersPage() {
     setMessage(null);
 
     try {
-      const response = await fetch('/api/admin/users', {
-        method: 'POST',
+      const response = await fetch("/api/admin/users", {
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
         body: JSON.stringify({ email, name, role }),
       });
@@ -30,16 +33,16 @@ export default function AdminUsersPage() {
       const data = await response.json();
 
       if (response.ok) {
-        setMessage({ type: 'success', text: data.message });
-        setEmail('');
-        setName('');
-        setRole('user');
+        setMessage({ type: "success", text: data.message });
+        setEmail("");
+        setName("");
+        setRole("user");
       } else {
-        setMessage({ type: 'error', text: data.message });
+        setMessage({ type: "error", text: data.message });
       }
     } catch {
       setMessage({
-        type: 'error',
+        type: "error",
         text: "Erreur lors de la création de l'utilisateur",
       });
     } finally {
@@ -48,7 +51,7 @@ export default function AdminUsersPage() {
   };
 
   return (
-    <div className="flex min-h-screen items-center justify-center p-4">
+    <div className="flex justify-center p-4">
       <Card className="w-full max-w-md p-6 shadow-lg">
         <CardTitle className="text-center mb-6">Créer un utilisateur</CardTitle>
         <CardContent>
@@ -85,7 +88,9 @@ export default function AdminUsersPage() {
                 id="role"
                 name="role"
                 value={role}
-                onChange={(e) => setRole(e.target.value as 'user' | 'manager' | 'admin')}
+                onChange={(e) =>
+                  setRole(e.target.value as "user" | "manager" | "admin")
+                }
                 className="w-full px-3 py-2 border border-input rounded-md bg-background"
                 required
               >
@@ -98,9 +103,9 @@ export default function AdminUsersPage() {
             {message && (
               <div
                 className={`p-4 rounded-md ${
-                  message.type === 'success'
-                    ? 'bg-green-50 text-green-800 border border-green-200'
-                    : 'bg-red-50 text-red-800 border border-red-200'
+                  message.type === "success"
+                    ? "bg-green-50 text-green-800 border border-green-200"
+                    : "bg-red-50 text-red-800 border border-red-200"
                 }`}
               >
                 {message.text}
@@ -108,7 +113,7 @@ export default function AdminUsersPage() {
             )}
 
             <Button type="submit" className="w-full mt-2" disabled={loading}>
-              {loading ? 'Création en cours...' : "Créer l'utilisateur"}
+              {loading ? "Création en cours..." : "Créer l'utilisateur"}
             </Button>
           </form>
 

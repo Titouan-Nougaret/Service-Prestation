@@ -30,6 +30,7 @@ import {
   Sun01Icon,
   Moon01Icon,
   Pdf01Icon,
+  PenToolAddIcon,
 } from "@hugeicons/core-free-icons";
 import { useUser } from "@/hooks/use-user";
 import Link from "next/link";
@@ -41,6 +42,7 @@ import { selectTheme } from "@/store/selectors/user-preferences-selector";
 
 export function AppSidebar() {
   const user = useUser();
+  console.log("AppSidebar - Current User:", user);
   const theme = useAppSelector(selectTheme);
 
   const router = useRouter();
@@ -83,6 +85,11 @@ export function AppSidebar() {
           title: "Gestion des prestations",
           icon: WantedIcon,
           items: [
+            {
+              title: "Nouvelle installation",
+              href: "/prestations/new-install",
+              icon: PenToolAddIcon,
+            },
             {
               title: "Templates",
               href: "/prestations/pdf-template",

@@ -1,30 +1,24 @@
 import { NextRequest, NextResponse } from "next/server";
 import { decrypt } from "@/lib/auth";
 
-// Routes qui nécessitent d'être connecté
-const protectedRoutes = ["/dashboard", "/admin", "/profile","/presta","/"];
-
-// Routes de connexion/inscription (on redirige vers / si déjà connecté)
-const authRoutes = ["/login", "/register"];
+// Routes publiques (accessibles sans connexion)
+const publicRoutes = ["/login"];
 
 export async function proxy(request: NextRequest) {
   const path = request.nextUrl.pathname;
-  const isProtectedRoute = protectedRoutes.some((route) => 
-    route === "/" ? path === "/" : path.startsWith(route)
-  );
-  const isAuthRoute = authRoutes.some((route) => path.startsWith(route));
+  const isPublicRoute = publicRoutes.some((route) => path.startsWith(route));
 
   // Récupérer le token depuis les cookies
   const cookie = request.cookies.get("session")?.value;
   const session = cookie ? await decrypt(cookie).catch(() => null) : null;
 
-  // Rediriger vers /login si on tente d'accéder à une route protégée sans session
-  if (isProtectedRoute && !session) {
+  // Rediriger vers /login si on tente d'accéder à une route non publique sans session
+  if (!isPublicRoute && !session) {
     return NextResponse.redirect(new URL("/login", request.nextUrl));
   }
 
   // Rediriger vers / si on tente d'accéder à login/register avec une session active
-  if (isAuthRoute && session) {
+  if (isPublicRoute && session) {
     return NextResponse.redirect(new URL("/", request.nextUrl));
   }
 

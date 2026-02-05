@@ -1,5 +1,11 @@
-import { Card } from "@/components/ui/card";
-import { cn } from "@/lib/utils";
+"use client";
+
+import {
+  FullmoonAddress,
+  FullmoonWatermark,
+  PdfViewerWrapper,
+} from "@/components/pdf-components";
+import { Document, Page, View, StyleSheet } from "@react-pdf/renderer";
 
 export default function PrestaInstallPdf({
   className,
@@ -7,11 +13,28 @@ export default function PrestaInstallPdf({
   className?: string;
 }) {
   return (
-    <Card
-      className={cn(
-        "bg-[oklch(1_0_0)] text-[oklch(0.13_0.028_261.692)] border-border ",
-        className,
-      )}
-    ></Card>
+    <PdfViewerWrapper className={className}>
+      <Document>
+        <Page size="A4" style={styles.page}>
+          <FullmoonWatermark />
+          <View style={styles.section}>
+            <FullmoonAddress />
+          </View>
+        </Page>
+      </Document>
+    </PdfViewerWrapper>
   );
 }
+
+const styles = StyleSheet.create({
+  page: {
+    padding: 30,
+    position: "relative",
+    color: "black",
+    fontFamily: "Teko",
+  },
+  section: {
+    margin: 10,
+    padding: 10,
+  },
+});

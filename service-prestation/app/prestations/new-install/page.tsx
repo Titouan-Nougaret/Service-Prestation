@@ -3,7 +3,7 @@ import PrestaInstallPdf from "@/components/smart-document/presta-install/pdf-tem
 
 export default function NewInstall() {
   return (
-    <div className="flex gap-4 justify-around">
+    <div className="flex h-full gap-4 justify-around">
       <PrestaInstallForm className="w-2/5" />
       <PrestaInstallPdf className="w-3/5" />
     </div>

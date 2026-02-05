@@ -4,6 +4,7 @@ import {
   FullmoonAddress,
   FullmoonWatermark,
   PdfViewerWrapper,
+  Title,
 } from "@/components/pdf-components";
 import { Document, Page, View, StyleSheet } from "@react-pdf/renderer";
 
@@ -19,6 +20,10 @@ export default function PrestaInstallPdf({
           <FullmoonWatermark />
           <View style={styles.section}>
             <FullmoonAddress />
+            <Title>
+              MISE EN RELATION POUR PRESTATION D’INSTALLATION DE VOTRE
+              CLIMATISEUR
+            </Title>
           </View>
         </Page>
       </Document>

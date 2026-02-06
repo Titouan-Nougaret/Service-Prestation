@@ -52,7 +52,7 @@ export default function PdfViewerWrapper({
     return (
       <Card
         className={cn(
-          "bg-[oklch(1_0_0)] text-[oklch(0.13_0.028_261.692)]",
+          "bg-pdf-card-background text-[oklch(0.13_0.028_261.692)] shadow-pdf-card",
           className,
         )}
       >
@@ -66,7 +66,7 @@ export default function PdfViewerWrapper({
   return (
     <Card
       className={cn(
-        "bg-[oklch(1_0_0)] text-[oklch(0.13_0.028_261.692)] h-full p-3",
+        "bg-pdf-card-background text-[oklch(0.13_0.028_261.692)] h-full p-3 shadow-pdf-card",
         className,
       )}
     >

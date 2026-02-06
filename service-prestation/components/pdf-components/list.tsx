@@ -5,11 +5,20 @@ interface ListProps {
   children: ReactNode;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   style?: any;
+  indent?: number;
 }
 
-export function List({ children, style }: ListProps) {
+export function List({ children, style, indent = 0 }: ListProps) {
   return (
-    <View style={style ? [styles.list, style] : styles.list}>{children}</View>
+    <View
+      style={[
+        styles.list,
+        { paddingLeft: indent * 20 },
+        ...(Array.isArray(style) ? style : [style]),
+      ]}
+    >
+      {children}
+    </View>
   );
 }
 

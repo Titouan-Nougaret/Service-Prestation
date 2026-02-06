@@ -21,8 +21,8 @@ export interface OrderData {
   moyenDePaiement: string;
   nomClient: string;
   prenomClient: string;
-  date: string;
-  telephoneClient: string;
+  date?: string;
+  telephoneClient?: string;
   adresseClient: string;
   codePostalClient: string;
   villeClient: string;
